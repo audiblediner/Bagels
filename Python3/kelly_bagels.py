@@ -1,71 +1,85 @@
-
 import random
-number = ''.join(random.sample("0123456789", 3))
-print(number)
-split_num = [int(char) for char in str(number)]
-print(split_num)
 
-num1 = split_num[0]
-num2 = split_num[1]
-num3 = split_num[2]
+NUM_DIGITS = 3
+MAX_GUESS = 10
 
-# print("lookie here!")
-# print(num1, num2, num3)
+def getSecretNum():
+    numbers = list(range(10))
+    random.shuffle(numbers)
+    secretNum = ''
+    for i in range(NUM_DIGITS):
+        secretNum += str(numbers[i])
+    print(secretNum)
+    return secretNum
 
-theenum=(num1*100+num2*10+num3)
-userguess = 0
-# create answer array
-answerarray = []
+def getClues(guess, secretNum):
+    fermi = pico = 0
+    output = []
+    for index in range(len(guess)):
+        digit = guess[index]
+        if digit==secretNum[index]:
+            fermi += 1
+        elif digit in secretNum:
+            pico += 1
+    for f in range(fermi):
+        output.append("Fermi")
+    for p in range(pico):
+        output.append("Pico")
+    if output==[]:
+        output.append("Bagels")
+    return(" ".join(output))
+    
+def isOnlyDigits(num):
+    if num == '':
+        return False
+    for i in num:
+        if i not in ' 0 1 2 3 4 5 6 7 8 9'.split():
+            return False
+    return True
 
+print('--------------------------------------------------------------')
+print('\t\tWELCOME TO THE GAME OF BAGELS!')
+print('--------------------------------------------------------------')
+print('You will try to guess a %s-digit number.'%(NUM_DIGITS))
+print('I will give you clues based on your response.')
+print('--------------------------------------------------------------')
+print('When I say...\tit means that...')
+print('--------------------------------------------------------------')
+print('Bagels\t\tNone are right.')
+print('Pico\t\tOne digit is correct but in the wrong position.')
+print('Fermi\t\tOne digit is correct and in the right position.')
+print('--------------------------------------------------------------')
 
-while theenum != userguess:
-    x, y, z = input("Pick 3 non-repeating numbers")
-    x = int(x)
-    y = int(y)
-    z = int(z)
-    userguess = (a*100+b*10+c)
-print(theenum)
+def main():
+    play = "yes"
+    while play == "yes":
+        print("I am thinking of a 3-digit number. Try to guess what it is")
+        print('I will give you clues based on your response.')
+        print('--------------------------------------------------------------')
+        print('When I say...\tit means that...')
+        print('--------------------------------------------------------------')
+        print('Bagels\t\tNone are right.')
+        print('Pico\t\tOne digit is correct but in the wrong position.')
+        print('Fermi\t\tOne digit is correct and in the right position.')
+        print('--------------------------------------------------------------')        
 
-userguess = int(input("Pick a number!"))
+        secretNum = getSecretNum()
+        
+        print("I have thought up a number. You have 10 guesses to get it")
 
-if theenum == userguess:
-    print("You've got it!")
-else:
-    print("Wrong!")
+        for i in range(1,11):
+            guess = input("Guess #" + str(i) + ":\n")
+            if isOnlyDigits(guess):
+                clue = getClues(guess,secretNum)
+                print(clue)
+                
+                # if user guesses correct number, the for loop breaks
+                if clue == "Fermi Fermi Fermi":
+                    print("You win! Congrats!")
+                play = input('Would you like to play again? (yes or no)')
+                if play == 'no':
+                    break
 
+                
 
-
-
-
-
-
-
-
-# Random number generation
-
-# from random import randint
-# def random_with_N_digits(n):
-#     range_start = 10**(n-1)
-#     range_end = (10**n)-1
-#     return randint(range_start, range_end)
-# print(random_with_N_digits(3))
-#
-# import random
-# number = ''.join(random.sample("0123456789", 3))
-# print(number)
-#
-# num = random.randint (0,999)
-# print (num)
-
-# from random import shuffle
-# l = [i for i in range(10)]
-# shuffle(l)
-# n = l[0] + 10 * (l[1] + 10 * (l[2] + 10 * l[3]))
-
-# import random
-#
-# num = []
-# num = [0,1,2,3,4,5,6,7,8,9]
-# x = random.shuffle(num)
-# y = random.shuffle(num)
-# z = random.shuffle(num)
+main()
